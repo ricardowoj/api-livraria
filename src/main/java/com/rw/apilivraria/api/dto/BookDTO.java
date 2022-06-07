@@ -6,6 +6,15 @@ public class BookDTO {
 	private String author;
 	private String isbn;
 
+	public BookDTO() {
+	}
+
+	public BookDTO(String title, String author, String isbn) {
+		this.title = title;
+		this.author = author;
+		this.isbn = isbn;
+	}
+
 	public Long getId() {
 		return id;
 	}
