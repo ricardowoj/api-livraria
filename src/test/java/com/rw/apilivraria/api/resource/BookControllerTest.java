@@ -1,5 +1,9 @@
 package com.rw.apilivraria.api.resource;
 
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -63,8 +67,18 @@ public class BookControllerTest {
 	}
 	
 	@Test
-	@DisplayName("Deve lançar erro de validação quando nãou houver dados suficiente para criação do livro.")
-	public void createInvalidBookTest() {
+	@DisplayName("Deve lançar erro de validação quando não houver dados suficiente para criação do livro.")
+	public void createInvalidBookTest() throws Exception {
+		String json = new ObjectMapper().writeValueAsString(new BookDTO());
+		MockHttpServletRequestBuilder request = 
+				MockMvcRequestBuilders
+					.post(BOOK_API)
+					.contentType(MediaType.APPLICATION_JSON)
+					.accept(MediaType.APPLICATION_JSON)
+					.content(json);
 		
+		mvc.perform(request)
+				.andExpect(status().isBadRequest())
+				.andExpect(jsonPath("errors", Matchers.hasSize(3)));
 	}
 }
